@@ -5,10 +5,8 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.schooldiaryapp.data.network.models.Grade
 import com.example.schooldiaryapp.domain.use_cases.GetChatListUseCase
-import com.example.schooldiaryapp.domain.use_cases.GetGradesByStudentUseCase
-import com.example.schooldiaryapp.domain.use_cases.GetStudentListUseCase
+import com.example.schooldiaryapp.domain.use_cases.GetStudentsInfoUseCase
 import com.example.schooldiaryapp.presentation.models.ClassListState
 import com.example.schooldiaryapp.presentation.models.StudentListState
 import com.example.schooldiaryapp.utils.Resource
@@ -19,8 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ChatListViewModel @Inject constructor(
     private val getChatListUseCase: GetChatListUseCase,
-    private val getStudentListUseCase: GetStudentListUseCase,
-    private val getGradesByStudentUseCase: GetGradesByStudentUseCase
+    private val getStudentsInfoUseCase: GetStudentsInfoUseCase
     ) : ViewModel() {
 
     private val _classList = mutableStateOf(ClassListState())
@@ -83,7 +80,7 @@ class ChatListViewModel @Inject constructor(
         Log.d("LOL", "В fetchStudentList")
         viewModelScope.launch {
             _studentList.value = StudentListState(isLoading = true)
-            when (val result = getStudentListUseCase.invoke(classId)) {
+            when (val result = getStudentsInfoUseCase.invoke(classId)) {
                 is Resource.Success -> {
                     Log.d("LOL", "is Resource.Success -> ${result.data}")
                     _studentList.value = StudentListState(
@@ -92,20 +89,6 @@ class ChatListViewModel @Inject constructor(
                         isLoading = false
                     )
 
-                    if (_studentList.value.studentList[0].gradeList == null){
-                        Log.d("LOL", "calling getGradesByStudents")
-                    }
-                    _studentList.value.studentList.forEach{
-
-                                Log.d("LOL", "calling getGradesByStudents")
-
-
-
-//                            it.gradeList.value = async {
-//                                getGradesByStudents(it.studentId.toInt())
-//                            }.await()
-
-                    }
                 }
 
                 is Resource.Error -> {
@@ -128,21 +111,5 @@ class ChatListViewModel @Inject constructor(
             )
         }
     }
-    suspend fun getGradesByStudents(studentId: Int?): List<Grade> {
-        Log.d("LOL", "В fetchGradesByStudentId")
-        return when (val result = getGradesByStudentUseCase.invoke(studentId)) {
-            is Resource.Success -> {
-                Log.d("LOL", "is Resource.Success -> ${result.data}")
-                result.data ?: emptyList()
-            }
-            is Resource.Error -> {
-                Log.d("LOL", "is Resource.Error -> ${result.message}")
-                emptyList()
-            }
-            is Resource.Loading -> {
-                Log.d("LOL", "is Resource.Loading")
-                emptyList()
-            }
-        }
-    }
+
 }

@@ -5,6 +5,7 @@ import com.example.ecommerceapp.network.ApiService
 import com.example.schooldiaryapp.data.network.models.Grade
 import com.example.schooldiaryapp.data.network.models.SchoolClass
 import com.example.schooldiaryapp.data.network.models.Student
+import com.example.schooldiaryapp.data.network.models.StudentsInfo
 import com.example.schooldiaryapp.data.network.models.Teacher
 import com.example.schooldiaryapp.domain.ApiRepository
 import com.example.schooldiaryapp.utils.Resource
@@ -75,6 +76,15 @@ class ApiRepositoryImpl @Inject constructor(
         }
     }
 
-
+    override suspend fun getStudentsInfoByClassID(classId: Int?): Resource<List<StudentsInfo>> {
+        val response = try{
+            api.getStudentsInfoByClassID(classId)
+        }catch (e: Exception){
+            Log.d("LOL", "Error ${e.message}")
+            return Resource.Error("Error ${e.message}")
+        }
+        Log.d("LOL", "response ${response[0]}")
+        return Resource.Success(response)
+    }
 
 }

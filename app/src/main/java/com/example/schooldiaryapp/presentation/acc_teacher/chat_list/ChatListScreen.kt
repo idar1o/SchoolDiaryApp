@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.schooldiaryapp.data.network.models.Student
+import com.example.schooldiaryapp.data.network.models.StudentsInfo
 import com.example.schooldiaryapp.presentation.models.ClassListState
 import com.example.schooldiaryapp.presentation.models.StudentListState
 import com.example.schooldiaryapp.ui.theme.ActiveBgColor
@@ -59,7 +60,7 @@ fun ChatListScreen(
     val listState = rememberLazyListState()
     val defaultValue: String = if (stateClassList.classList.isNotEmpty()) stateClassList.classList[0].className else ""
     val selectedClass = remember { mutableStateOf(defaultValue) }
-    val studentList = remember { mutableStateOf<List<Student>>(vm.studentList.value.studentList) }
+    val studentList = remember { mutableStateOf<List<StudentsInfo>>(vm.studentList.value.studentList) }
 
     studentList.value = vm.studentList.value.studentList
 
@@ -147,7 +148,7 @@ fun ClassAppBarPreview() {
 @Composable
 fun MainContent(
     listState: LazyListState,
-    stateStudentList: MutableState<List<Student>>,
+    stateStudentList: MutableState<List<StudentsInfo>>,
     onItemClick: (classId: Int) -> Unit
 ) {
     val padding by animateDpAsState(
@@ -167,7 +168,7 @@ fun MainContent(
 }
 
 @Composable
-fun ClassItem(student: Student,
+fun ClassItem(student: StudentsInfo,
 //              onItemClick: (classId: Int) -> Unit
 ) {
     Column(
@@ -190,7 +191,7 @@ fun ClassItem(student: Student,
                 .fillMaxWidth(),
 
         ) {
-            student.gradeList?.value?.forEach { grade ->
+            student.gradeList.forEach { grade ->
                 androidx.compose.material3.Text(
                     text = grade.grade.toString(),
                     modifier = Modifier.padding(4.dp)

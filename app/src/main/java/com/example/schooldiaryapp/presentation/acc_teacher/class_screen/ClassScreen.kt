@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TopAppBar
@@ -64,10 +63,10 @@ fun ClassScreen(
                 LazyColumn(
                     modifier = Modifier.weight(1f)
                 ) {
-                    items(students.studentList) { student ->
-                        StudentItem(student, selectedGrade = selectedGrade)
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
+//                    items(students.studentList) { student ->
+//                        StudentItem(student, selectedGrade = selectedGrade)
+//                        Spacer(modifier = Modifier.height(8.dp))
+//                    }
                 }
 
                 Row(
