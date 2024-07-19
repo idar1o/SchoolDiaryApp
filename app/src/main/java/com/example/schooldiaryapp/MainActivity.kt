@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -25,14 +27,22 @@ import com.example.schooldiaryapp.presentation.login.LoginScreen
 import com.example.schooldiaryapp.ui.theme.SchoolDiaryAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             SchoolDiaryAppTheme {
-//                WebViewScreen()
+
                 Navigation()
+
+
+
+//                WebViewScreen()
+//                Navigation()
 
             }
         }
@@ -104,15 +114,11 @@ fun Navigation(){
         composable(route = "class_list_nav_screen") {
             val viewModel: ChatListViewModel = hiltViewModel()
 
-            viewModel.classList.value.let {it1 ->
                 ChatListScreen(
-                    stateClassList = it1,
                     onItemClick = {
                     },
                     vm = viewModel
                 )
-            }
-
 
 
 

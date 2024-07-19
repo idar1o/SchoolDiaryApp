@@ -58,17 +58,7 @@ class ClassScreenViewModel@Inject constructor(
             when (val result = getStudentListUseCase.invoke(classId)) {
                 is Resource.Success -> {
                     Log.d("LOL", "is Resource.Success -> ${result.data}")
-//                    _studentList.value = StudentListState(
-//                        studentList = result.data ?: emptyList(),
-//                        loadError = "",
-//                        isLoading = false
-//                    )
-//                    _studentList.value.studentList.forEach{
-//                        it.gradeList = async {
-//                            getGradesByStudents(it.studentId.toInt())
-//                        }.await()
-//
-//                    }
+
                 }
                 is Resource.Error -> {
                     Log.d("LOL", "is Resource.Error -> ${result.data}")
@@ -79,7 +69,6 @@ class ClassScreenViewModel@Inject constructor(
                 }
                 is Resource.Loading -> {
                     Log.d("LOL", "is Resource.Loading -> ${result.data}")
-
 
                 }
             }
