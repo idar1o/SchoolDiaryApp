@@ -13,5 +13,5 @@ data class Grade(
     @SerializedName("subjectId")
     var subjectId: Int,
     @SerializedName("gradeDt")
-    var gradeDt: LocalDateTime?,
+    var gradeDt: LocalDateTime,
 )

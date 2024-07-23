@@ -4,47 +4,93 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.activity.viewModels
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.schooldiaryapp.presentation.acc_student.subject_detail.SubjectDetailScreen
-import com.example.schooldiaryapp.presentation.acc_student.subject_detail.SubjectDetailScreenViewModel
-import com.example.schooldiaryapp.presentation.acc_student.subjects_list.SubjectsListScreen
-import com.example.schooldiaryapp.presentation.acc_student.subjects_list.SubjectsListScreenViewModel
-import com.example.schooldiaryapp.presentation.acc_teacher.chat_list.ChatListScreen
-import com.example.schooldiaryapp.presentation.acc_teacher.chat_list.ChatListViewModel
 import com.example.schooldiaryapp.presentation.acc_teacher.class_screen.ClassScreen
 import com.example.schooldiaryapp.presentation.acc_teacher.class_screen.ClassScreenViewModel
+import com.example.schooldiaryapp.presentation.acc_teacher.tasks_screen.TasksScreen
+import com.example.schooldiaryapp.presentation.components.TopClassBar
+import com.example.schooldiaryapp.presentation.components.TopClassesBarViewModel
 import com.example.schooldiaryapp.presentation.login.LoginScreen
+import com.example.schooldiaryapp.presentation.navigation.BottomBarNavigation
+import com.example.schooldiaryapp.presentation.navigation.BottomBarRow
+import com.example.schooldiaryapp.presentation.navigation.appstate.rememberAppState
+import com.example.schooldiaryapp.ui.theme.AppBarBgColor
 import com.example.schooldiaryapp.ui.theme.SchoolDiaryAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
+    private val topAppBarViewModel: TopClassesBarViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             SchoolDiaryAppTheme {
 
-                Navigation()
+                val appState = rememberAppState()
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Scaffold(
+                        topBar = {
+                            if (appState.shouldShowBottomBar){
+                                TopClassBar(topAppBarViewModel)
+                            }
+                        },
+                        bottomBar = {
+                            if (appState.shouldShowBottomBar)
+                                BottomAppBar(
+                                    containerColor = AppBarBgColor,
+                                    contentPadding = PaddingValues(horizontal = 20.dp),
+                                    modifier = Modifier
+                                        .height(70.dp)
+                                        .clip(
+                                            RoundedCornerShape(
+                                                topStart = 24.dp, topEnd = 24.dp
+                                            )
+                                        )
+                                ) {
+                                    BottomBarRow(
+                                        navHostController = appState.navHostController,
+                                    )
+                                }
+                        },
+
+                    ) { innerPadding ->
+                        BottomBarNavigation(
+                            navHostController = appState.navHostController,
+                            padding = innerPadding,
+                            topAppBarViewModel
+                        )
+                    }
+                }
+            }
 
 
 
 //                WebViewScreen()
 //                Navigation()
-
-            }
         }
     }
 }
@@ -58,67 +104,31 @@ fun Navigation(){
         Log.d("LOL", "В Navhoste")
 
         composable(route = "login_nav_screen") {
-
-            LoginScreen(onTeacherClick = {
-                navController.navigate(
-                    route = "class_list_nav_screen"
-                )
-            },
-                onStudentClick = {
-
-                    navController.navigate(
-                        route = "subject_list_nav_screen"
-                    )
-                }
+            LoginScreen(
+                navHostController = navController
             )
-
         }
-        composable(route = "subject_list_nav_screen") {
-            val viewModel: SubjectsListScreenViewModel = hiltViewModel()
-            viewModel.subjectList.value.let { it1 ->
-                SubjectsListScreen(
-                    stateSubjectList = it1,
-                    onItemClick = { teacherId, subject ->
 
-                        navController.navigate(
-                            route = "subject_detail_screen/${teacherId}/${subject}"
-                        )
-                    }
-                )
-            }
+
+        composable(route = "class_list_nav_screen") {
+
+
         }
         composable(
-            route = "subject_detail_screen/{teacherId}/{subject}",
+            route = "class_tasks_nav_screen/{classId}",
             arguments = listOf(
-                navArgument("teacherId") {
+                navArgument("classId") {
                     type = NavType.IntType
-                },
-                navArgument("subject") {
-                    type = NavType.StringType
                 }
             )
-        ) {
-
-
-            val subject = remember {
-                it.arguments?.getString("subject")
+            ) {
+//            val viewModel: ChatListViewModel = hiltViewModel()
+            val classId = remember {
+                it.arguments?.getInt("classId")
             }
-            val viewModel: SubjectDetailScreenViewModel = hiltViewModel()
-            viewModel.gradeList.value.let { it1 ->
-                SubjectDetailScreen(
-                    subject = subject,
-                    grades = it1
-                )
-            }
-        }
-        composable(route = "class_list_nav_screen") {
-            val viewModel: ChatListViewModel = hiltViewModel()
-
-                ChatListScreen(
-                    onItemClick = {
-                    },
-                    vm = viewModel
-                )
+            TasksScreen(
+                navController
+            )
 
 
 
@@ -148,7 +158,6 @@ fun Navigation(){
 //
 //                                }
 //                            }.value
-//
             ClassScreen(
                 studentInfo,
                 onAddGrade = { grade ->

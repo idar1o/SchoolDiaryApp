@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.TopAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -35,7 +34,6 @@ import com.example.schooldiaryapp.R
 import com.example.schooldiaryapp.data.network.models.Grade
 import com.example.schooldiaryapp.data.network.models.Student
 import com.example.schooldiaryapp.presentation.models.StudentListState
-import com.example.schooldiaryapp.ui.theme.AppBarBgColor
 
 val TOP_BAR_HEIGHT = 56.dp
 
@@ -51,7 +49,6 @@ fun ClassScreen(
     Scaffold(
         topBar = {
 
-            TopClassBar()
         },
         content = {
             Column(
@@ -111,17 +108,7 @@ fun ClassScreen(
     )
 }
 
-@Composable
-fun TopClassBar() {
-    TopAppBar(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = AppBarBgColor)
-            .height(TOP_BAR_HEIGHT),
-        title = {
 
-        })
-}
 
 
 @Composable

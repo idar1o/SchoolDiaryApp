@@ -13,9 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.schooldiaryapp.presentation.navigation.ScreenRoutes
 
 @Composable
-fun LoginScreen(onTeacherClick: () -> Unit, onStudentClick: () -> Unit) {
+fun LoginScreen(
+    navHostController: NavHostController
+) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -29,7 +33,9 @@ fun LoginScreen(onTeacherClick: () -> Unit, onStudentClick: () -> Unit) {
                 modifier = Modifier.padding(bottom = 32.dp)
             )
             Button(
-                onClick = onTeacherClick,
+                onClick = {
+                            navHostController.navigate(ScreenRoutes.BottomBar.route)
+                          },
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .padding(vertical = 8.dp)
@@ -37,7 +43,9 @@ fun LoginScreen(onTeacherClick: () -> Unit, onStudentClick: () -> Unit) {
                 Text(text = "Teacher", fontSize = 18.sp)
             }
             Button(
-                onClick = onStudentClick,
+                onClick = {
+
+                          },
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .padding(vertical = 8.dp)

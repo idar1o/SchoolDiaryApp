@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SchoolDiaryApp</string>
+    <string name="tasks">tasks</string>
+    <string name="schedule">schedule</string>
+    <string name="announcement">announcement</string>
+    <string name="grades">grades</string>
 </resources>

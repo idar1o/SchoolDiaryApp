@@ -54,8 +54,4 @@ object NetworkModule {
     @Singleton
      fun ApiRepository (apiService: ApiService): ApiRepository = ApiRepositoryImpl(apiService)
 
-
-
-
-
 }
