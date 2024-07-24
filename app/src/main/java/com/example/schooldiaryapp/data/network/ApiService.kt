@@ -2,6 +2,8 @@ package com.example.ecommerceapp.network
 
 import com.example.schooldiaryapp.data.network.models.Assignment
 import com.example.schooldiaryapp.data.network.models.Grade
+import com.example.schooldiaryapp.data.network.models.LoginRequest
+import com.example.schooldiaryapp.data.network.models.LoginResponse
 import com.example.schooldiaryapp.data.network.models.SchoolClass
 import com.example.schooldiaryapp.data.network.models.Student
 import com.example.schooldiaryapp.data.network.models.StudentsInfo
@@ -35,6 +37,8 @@ interface ApiService {
 
     @POST("/students/grade")
     suspend fun addStudentGrade(@Body studentData: Grade): Response<Unit>
+    @POST("/login")
+    suspend fun teacherLogin(@Body loginData: LoginRequest): Response<LoginResponse>
 
 
 }

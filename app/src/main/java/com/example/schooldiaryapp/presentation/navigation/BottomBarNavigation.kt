@@ -1,5 +1,6 @@
 package com.example.schooldiaryapp.presentation.navigation
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -21,13 +22,15 @@ import com.example.schooldiaryapp.presentation.acc_teacher.tasks_screen.TasksScr
 import com.example.schooldiaryapp.presentation.acc_teacher.tasks_screen.TasksScreenViewModel
 import com.example.schooldiaryapp.presentation.components.TopClassesBarViewModel
 import com.example.schooldiaryapp.presentation.login.LoginScreen
+import com.example.schooldiaryapp.presentation.login.LoginScreenViewModel
 
 
 @Composable
 fun BottomBarNavigation(
     navHostController: NavHostController,
     padding: PaddingValues,
-    topAppBarViewModel: TopClassesBarViewModel
+    topAppBarViewModel: TopClassesBarViewModel,
+    context: Context
 ) {
 
     NavHost(
@@ -35,7 +38,8 @@ fun BottomBarNavigation(
         modifier = Modifier.padding(padding)
     ) {
         composable(ScreenRoutes.Login.route) {
-            LoginScreen(navHostController = navHostController)
+            val vm : LoginScreenViewModel = hiltViewModel()
+            LoginScreen(navHostController = navHostController, vm = vm, context = context)
         }
         navigation(
             route = ScreenRoutes.BottomBar.route,

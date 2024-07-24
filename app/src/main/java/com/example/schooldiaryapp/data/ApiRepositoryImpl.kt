@@ -4,6 +4,8 @@ import android.util.Log
 import com.example.ecommerceapp.network.ApiService
 import com.example.schooldiaryapp.data.network.models.Assignment
 import com.example.schooldiaryapp.data.network.models.Grade
+import com.example.schooldiaryapp.data.network.models.LoginRequest
+import com.example.schooldiaryapp.data.network.models.LoginResponse
 import com.example.schooldiaryapp.data.network.models.SchoolClass
 import com.example.schooldiaryapp.data.network.models.Student
 import com.example.schooldiaryapp.data.network.models.StudentsInfo
@@ -77,6 +79,26 @@ class ApiRepositoryImpl @Inject constructor(
                 val response = api.addStudentGrade(studentData)
                 if (response.isSuccessful) {
                     Resource.Success(Unit)
+                } else {
+                    Resource.Error("Failed to add student grade: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.d("LOL", "Error: ${e.message}")
+                Resource.Error("Error: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun teacherLogin(loginData: LoginRequest?): Resource<LoginResponse?> {
+        return if (loginData == null) {
+            Resource.Error(message="Student data is null")
+        } else {
+            try {
+                val response = api.teacherLogin(loginData)
+                if (response.isSuccessful) {
+                    val loginResponse = response.body()
+
+                    Resource.Success(loginResponse)
                 } else {
                     Resource.Error("Failed to add student grade: ${response.errorBody()?.string()}")
                 }

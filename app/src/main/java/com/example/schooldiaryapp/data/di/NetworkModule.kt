@@ -1,16 +1,19 @@
 package com.example.schooldiaryapp.data.di
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.ecommerceapp.network.ApiService
 import com.example.schooldiaryapp.data.ApiRepositoryImpl
 import com.example.schooldiaryapp.data.LocalDateTimeAdapter
+import com.example.schooldiaryapp.data.encryptedprefs.EncryptedPrefsHelper
 import com.example.schooldiaryapp.domain.ApiRepository
 import com.example.schooldiaryapp.utils.Constants
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -52,6 +55,12 @@ object NetworkModule {
 
     @Provides
     @Singleton
-     fun ApiRepository (apiService: ApiService): ApiRepository = ApiRepositoryImpl(apiService)
+    fun ApiRepository (apiService: ApiService): ApiRepository = ApiRepositoryImpl(apiService)
+
+    @Provides
+    @Singleton
+    fun provideEncryptedPrefsHelper(@ApplicationContext context: Context): EncryptedPrefsHelper {
+        return EncryptedPrefsHelper(context)
+    }
 
 }

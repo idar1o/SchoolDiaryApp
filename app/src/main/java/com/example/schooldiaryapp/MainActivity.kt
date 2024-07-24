@@ -29,7 +29,6 @@ import com.example.schooldiaryapp.presentation.acc_teacher.class_screen.ClassScr
 import com.example.schooldiaryapp.presentation.acc_teacher.class_screen.ClassScreenViewModel
 import com.example.schooldiaryapp.presentation.components.TopClassBar
 import com.example.schooldiaryapp.presentation.components.TopClassesBarViewModel
-import com.example.schooldiaryapp.presentation.login.LoginScreen
 import com.example.schooldiaryapp.presentation.navigation.BottomBarNavigation
 import com.example.schooldiaryapp.presentation.navigation.BottomBarRow
 import com.example.schooldiaryapp.presentation.navigation.appstate.rememberAppState
@@ -80,7 +79,8 @@ class MainActivity : ComponentActivity() {
                         BottomBarNavigation(
                             navHostController = appState.navHostController,
                             padding = innerPadding,
-                            topAppBarViewModel
+                            topAppBarViewModel,
+                            context = this
                         )
                     }
                 }
@@ -98,9 +98,7 @@ fun Navigation(){
         Log.d("LOL", "В Navhoste")
 
         composable(route = "login_nav_screen") {
-            LoginScreen(
-                navHostController = navController
-            )
+
         }
 
 
