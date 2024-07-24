@@ -27,7 +27,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.schooldiaryapp.presentation.acc_teacher.class_screen.ClassScreen
 import com.example.schooldiaryapp.presentation.acc_teacher.class_screen.ClassScreenViewModel
-import com.example.schooldiaryapp.presentation.acc_teacher.tasks_screen.TasksScreen
 import com.example.schooldiaryapp.presentation.components.TopClassBar
 import com.example.schooldiaryapp.presentation.components.TopClassesBarViewModel
 import com.example.schooldiaryapp.presentation.login.LoginScreen
@@ -86,11 +85,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-
-
-
-//                WebViewScreen()
-//                Navigation()
         }
     }
 }
@@ -110,10 +104,6 @@ fun Navigation(){
         }
 
 
-        composable(route = "class_list_nav_screen") {
-
-
-        }
         composable(
             route = "class_tasks_nav_screen/{classId}",
             arguments = listOf(
@@ -126,10 +116,6 @@ fun Navigation(){
             val classId = remember {
                 it.arguments?.getInt("classId")
             }
-            TasksScreen(
-                navController
-            )
-
 
 
         }

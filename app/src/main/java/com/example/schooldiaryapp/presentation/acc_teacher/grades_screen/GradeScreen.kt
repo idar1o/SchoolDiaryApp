@@ -54,8 +54,6 @@ fun GradeScreen(
     val studentList = remember { mutableStateOf<List<StudentsInfo>>(gradeScreenViewModel.studentList.value.studentList) }
     studentList.value = gradeScreenViewModel.studentList.value.studentList
 
-    LaunchedEffect(studentList){ Log.d("LOL", " studentList is empty ${studentList.value.isEmpty()}") }
-
     val listState = rememberLazyListState()
 
 

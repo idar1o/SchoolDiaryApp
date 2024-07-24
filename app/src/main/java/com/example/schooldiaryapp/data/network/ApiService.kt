@@ -1,5 +1,6 @@
 package com.example.ecommerceapp.network
 
+import com.example.schooldiaryapp.data.network.models.Assignment
 import com.example.schooldiaryapp.data.network.models.Grade
 import com.example.schooldiaryapp.data.network.models.SchoolClass
 import com.example.schooldiaryapp.data.network.models.Student
@@ -27,6 +28,10 @@ interface ApiService {
 
     @GET("/classes/students/grades/{class_id}")
     suspend fun getStudentsInfoByClassID(@Path("class_id") classId: Int?): List<StudentsInfo>
+
+    @GET("/classes/assignments/{class_id}")
+    suspend fun getAssignmentsByClassID(@Path("class_id") classId: Int?): List<Assignment>
+
 
     @POST("/students/grade")
     suspend fun addStudentGrade(@Body studentData: Grade): Response<Unit>

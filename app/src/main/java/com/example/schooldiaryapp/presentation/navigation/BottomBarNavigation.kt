@@ -18,6 +18,7 @@ import com.example.schooldiaryapp.presentation.acc_teacher.grades_screen.GradeSc
 import com.example.schooldiaryapp.presentation.acc_teacher.grades_screen.GradeScreenViewModel
 import com.example.schooldiaryapp.presentation.acc_teacher.schedule_screen.ScheduleScreen
 import com.example.schooldiaryapp.presentation.acc_teacher.tasks_screen.TasksScreen
+import com.example.schooldiaryapp.presentation.acc_teacher.tasks_screen.TasksScreenViewModel
 import com.example.schooldiaryapp.presentation.components.TopClassesBarViewModel
 import com.example.schooldiaryapp.presentation.login.LoginScreen
 
@@ -44,7 +45,9 @@ fun BottomBarNavigation(
                 ScheduleScreen(navHostController = navHostController)
             }
             composable(BottomBarRoutes.TASKS.routes) {
-                TasksScreen(navHostController = navHostController)
+
+                val vm : TasksScreenViewModel = hiltViewModel()
+                TasksScreen(navHostController = navHostController, vm = vm, topAppBarViewModel = topAppBarViewModel)
             }
             composable(BottomBarRoutes.GRADES.routes) {
 //                ChatListScreen(

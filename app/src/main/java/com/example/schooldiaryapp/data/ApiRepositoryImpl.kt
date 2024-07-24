@@ -2,6 +2,7 @@ package com.example.schooldiaryapp.data
 
 import android.util.Log
 import com.example.ecommerceapp.network.ApiService
+import com.example.schooldiaryapp.data.network.models.Assignment
 import com.example.schooldiaryapp.data.network.models.Grade
 import com.example.schooldiaryapp.data.network.models.SchoolClass
 import com.example.schooldiaryapp.data.network.models.Student
@@ -35,6 +36,17 @@ class ApiRepositoryImpl @Inject constructor(
         return Resource.Success(response)
     }
 
+    override suspend fun getAssignmentsByClassID(classId: Int?): Resource<List<Assignment>> {
+        val response = try{
+            api.getAssignmentsByClassID(classId)
+        }catch (e: Exception){
+            Log.d("LOL", "Error ${e.message}")
+            return Resource.Error("Error ${e.message}")
+        }
+        Log.d("LOL", "response ${response[0]}")
+        return Resource.Success(response)
+    }
+
     override suspend fun getTeachersByClass(classId: Int?): Resource<List<Teacher>> {
         val response = try{
             api.getTeachersByClass(classId)
@@ -49,7 +61,6 @@ class ApiRepositoryImpl @Inject constructor(
     override suspend fun getGradesByStudentID(studentId: Int?): Resource<List<Grade>> {
         val response = try{
             api.getGradesByStudentID(studentId)
-
         }catch (e: Exception){
             Log.d("LOL", "Error ${e.message}")
             return Resource.Error("Error ${e.message}")
@@ -86,5 +97,7 @@ class ApiRepositoryImpl @Inject constructor(
         Log.d("LOL", "response ${response[0]}")
         return Resource.Success(response)
     }
+
+
 
 }

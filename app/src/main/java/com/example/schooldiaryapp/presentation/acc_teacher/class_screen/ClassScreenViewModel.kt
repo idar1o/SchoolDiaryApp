@@ -26,8 +26,6 @@ class ClassScreenViewModel@Inject constructor(
     private val _studentList = mutableStateOf(StudentListState())
     val studentList: State<StudentListState> = _studentList
 
-
-
     init {
         Log.d("LOL", "В init StudentViewModel")
 
@@ -51,6 +49,7 @@ class ClassScreenViewModel@Inject constructor(
             // Обработка результата (например, обновление UI или показ сообщения)
         }
     }
+
     fun fetchStudentList(classId: Int?) {
         Log.d("LOL", "В fetchStudentList")
         viewModelScope.launch {
@@ -78,6 +77,7 @@ class ClassScreenViewModel@Inject constructor(
                     "Loading : ${_studentList.value.isLoading}")
         }
     }
+
     suspend fun getGradesByStudents(studentId: Int?): List<Grade> {
         return when (val result = getGradesByStudentUseCase.invoke(studentId)) {
             is Resource.Success -> {
@@ -94,9 +94,4 @@ class ClassScreenViewModel@Inject constructor(
             }
         }
     }
-
-
-
-
-
 }
