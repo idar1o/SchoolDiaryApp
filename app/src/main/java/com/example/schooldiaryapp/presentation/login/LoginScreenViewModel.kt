@@ -27,15 +27,15 @@ class LoginScreenViewModel @Inject constructor(
             when(val result = teacherLoginUseCase.invoke(LoginRequest(password, username))){
                 is Resource.Success -> {
                     result.data?.let { data ->
-//                        encryptedPrefsHelper.saveLoginData(
-//                            TeacherData(
-//                                username = data.username,
-//                                password = password,
-//                                fullname = data.fullName,
-//                                userId = data.userId,
-//                                user_type = data.userType
-//                            )
-//                        )
+                        encryptedPrefsHelper.saveLoginData(
+                            TeacherData(
+                                username = data.username,
+                                password = password,
+                                fullname = data.fullName,
+                                userId = data.userId,
+                                user_type = data.userType
+                            )
+                        )
                         _loginResult.value = _loginResult.value.copy(
                             teacherData = TeacherData(
                                 username = data.username,

@@ -6,10 +6,12 @@ import com.example.schooldiaryapp.data.network.models.Assignment
 import com.example.schooldiaryapp.data.network.models.Grade
 import com.example.schooldiaryapp.data.network.models.LoginRequest
 import com.example.schooldiaryapp.data.network.models.LoginResponse
+import com.example.schooldiaryapp.data.network.models.MessageResponse
 import com.example.schooldiaryapp.data.network.models.SchoolClass
 import com.example.schooldiaryapp.data.network.models.Student
 import com.example.schooldiaryapp.data.network.models.StudentsInfo
 import com.example.schooldiaryapp.data.network.models.Teacher
+import com.example.schooldiaryapp.data.network.models.WeeklySchedules
 import com.example.schooldiaryapp.domain.ApiRepository
 import com.example.schooldiaryapp.utils.Resource
 import javax.inject.Inject
@@ -120,6 +122,30 @@ class ApiRepositoryImpl @Inject constructor(
         return Resource.Success(response)
     }
 
+    override suspend fun getLessonsByTeacherID(teacherId: Int?): Resource<WeeklySchedules> {
+        val response = try{
+            api.getLessonsByTeacherId(teacherId)
+        }catch (e: Exception){
+            Log.d("LOL", "Error ${e.message}")
+            return Resource.Error("Error ${e.message}")
+        }
+        Log.d("LOL", "getLessonsByTeacherID queried")
+        return Resource.Success(response)
+    }
+
+    override suspend fun getMessagesByUsersID(
+        senderId: Int,
+        receiverId: Int
+    ): Resource<List<MessageResponse>> {
+        val response = try{
+            api.getMessagesByUsersID(senderId, receiverId)
+        }catch (e: Exception){
+            Log.d("LOL", "getMessagesByUsersID Error ${e.message}")
+            return Resource.Error("Error ${e.message}")
+        }
+        Log.d("LOL", "getLessonsByTeacherID queried")
+        return Resource.Success(response)
+    }
 
 
 }

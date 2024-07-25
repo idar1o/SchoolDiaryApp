@@ -4,10 +4,12 @@ import com.example.schooldiaryapp.data.network.models.Assignment
 import com.example.schooldiaryapp.data.network.models.Grade
 import com.example.schooldiaryapp.data.network.models.LoginRequest
 import com.example.schooldiaryapp.data.network.models.LoginResponse
+import com.example.schooldiaryapp.data.network.models.MessageResponse
 import com.example.schooldiaryapp.data.network.models.SchoolClass
 import com.example.schooldiaryapp.data.network.models.Student
 import com.example.schooldiaryapp.data.network.models.StudentsInfo
 import com.example.schooldiaryapp.data.network.models.Teacher
+import com.example.schooldiaryapp.data.network.models.WeeklySchedules
 import com.example.schooldiaryapp.utils.Resource
 
 interface ApiRepository {
@@ -19,5 +21,9 @@ interface ApiRepository {
     suspend fun addStudentGrade(studentData: Grade?): Resource<Unit>
     suspend fun teacherLogin(loginData: LoginRequest?): Resource<LoginResponse?>
     suspend fun getStudentsInfoByClassID(classId: Int?): Resource<List<StudentsInfo>>
+    suspend fun getLessonsByTeacherID(teacherId: Int?): Resource<WeeklySchedules>
+    suspend fun getMessagesByUsersID(senderId: Int, receiverId: Int): Resource<List<MessageResponse>>
+
+
 
 }

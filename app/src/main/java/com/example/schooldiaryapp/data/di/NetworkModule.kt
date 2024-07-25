@@ -62,5 +62,13 @@ object NetworkModule {
     fun provideEncryptedPrefsHelper(@ApplicationContext context: Context): EncryptedPrefsHelper {
         return EncryptedPrefsHelper(context)
     }
+    @Provides
+    @Singleton
+    @TeacherId
+    fun provideTeacherId(encryptedPrefsHelper: EncryptedPrefsHelper): Int {
+        return encryptedPrefsHelper.getLoginData()?.userId ?: -1
+    }
 
 }
+
+annotation class TeacherId

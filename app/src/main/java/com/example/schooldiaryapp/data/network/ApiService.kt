@@ -4,15 +4,18 @@ import com.example.schooldiaryapp.data.network.models.Assignment
 import com.example.schooldiaryapp.data.network.models.Grade
 import com.example.schooldiaryapp.data.network.models.LoginRequest
 import com.example.schooldiaryapp.data.network.models.LoginResponse
+import com.example.schooldiaryapp.data.network.models.MessageResponse
 import com.example.schooldiaryapp.data.network.models.SchoolClass
 import com.example.schooldiaryapp.data.network.models.Student
 import com.example.schooldiaryapp.data.network.models.StudentsInfo
 import com.example.schooldiaryapp.data.network.models.Teacher
+import com.example.schooldiaryapp.data.network.models.WeeklySchedules
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 interface ApiService {
@@ -34,11 +37,18 @@ interface ApiService {
     @GET("/classes/assignments/{class_id}")
     suspend fun getAssignmentsByClassID(@Path("class_id") classId: Int?): List<Assignment>
 
+    @GET("/chat/messages")
+    suspend fun getMessagesByUsersID(@Query("sender_id") senderId: Int, @Query("receiver_id") receiverId: Int ): List<MessageResponse>
+
+    @GET("/lessons/teacher/{teacher_id}")
+    suspend fun getLessonsByTeacherId(@Path("teacher_id") teacherId: Int?): WeeklySchedules
 
     @POST("/students/grade")
     suspend fun addStudentGrade(@Body studentData: Grade): Response<Unit>
+
     @POST("/login")
     suspend fun teacherLogin(@Body loginData: LoginRequest): Response<LoginResponse>
+
 
 
 }
