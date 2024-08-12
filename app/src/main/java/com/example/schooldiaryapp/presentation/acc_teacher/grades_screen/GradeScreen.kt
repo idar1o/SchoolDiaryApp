@@ -3,6 +3,7 @@ package com.example.schooldiaryapp.presentation.acc_teacher.grades_screen
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,9 +30,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.schooldiaryapp.data.network.models.Grade
-import com.example.schooldiaryapp.data.network.models.StudentsInfo
+import com.example.schooldiaryapp.data.source.network.models.Grade
+import com.example.schooldiaryapp.data.source.network.models.StudentsInfo
 import com.example.schooldiaryapp.presentation.components.TopClassesBarViewModel
+import com.example.schooldiaryapp.presentation.navigation.ScreenRoutes
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -59,7 +61,7 @@ fun GradeScreen(
 
     Box(modifier = Modifier.fillMaxSize()){
 
-        MainContent(listState = listState, stateStudentList = studentList)
+        MainContent(listState = listState, stateStudentList = studentList, navHostController = navHostController)
 
 
     }
@@ -69,7 +71,8 @@ fun GradeScreen(
 @Composable
 fun MainContent(
     listState: LazyListState,
-    stateStudentList: MutableState<List<StudentsInfo>>
+    stateStudentList: MutableState<List<StudentsInfo>>,
+    navHostController: NavHostController
 ) {
 //    val padding by animateDpAsState(
 //        targetValue = if (listState.isScrolled) 0.dp else TOP_BAR_HEIGHT,
@@ -82,7 +85,9 @@ fun MainContent(
         items(
             items = stateStudentList.value,
         ) { student ->
-            ClassItem(student = student)
+            ClassItem(student = student){studentId, studentName ->
+                navHostController.navigate(ScreenRoutes.Chat.createRoute(studentId, studentName))
+            }
         }
     }
 }
@@ -90,15 +95,16 @@ fun MainContent(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ClassItem(student: StudentsInfo,
-//              onItemClick: (classId: Int) -> Unit
+              onItemClick: (studentId: Int, studentName: String) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
-//            .clickable { onItemClick(schoolClass.classId.toInt()) }, // Добавлен модификатор clickable,
+            .padding(8.dp)
+            .clickable { onItemClick(student.userId.toInt(), student.fullname) }, // Добавлен модификатор clickable,
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
+
     ) {
         Row(
             modifier = Modifier

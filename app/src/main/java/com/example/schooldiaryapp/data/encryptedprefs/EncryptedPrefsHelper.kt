@@ -19,6 +19,7 @@ class EncryptedPrefsHelper @Inject constructor(context: Context) {
     fun saveLoginData(loginResponse: TeacherData) {
         with(sharedPreferences.edit()) {
             putInt("userID", loginResponse.userId)
+            putInt("teacherID", loginResponse.teacherId)
             putString("username", loginResponse.username)
             putString("fullname", loginResponse.fullname)
             putString("userType", loginResponse.user_type)
@@ -29,13 +30,14 @@ class EncryptedPrefsHelper @Inject constructor(context: Context) {
 
     fun getLoginData(): TeacherData? {
         val userID = sharedPreferences.getInt("userID", -1)
+        val teacherID = sharedPreferences.getInt("teacherID", -1)
         val username = sharedPreferences.getString("username", null)
         val fullname = sharedPreferences.getString("fullname", null)
         val userType = sharedPreferences.getString("userType", null)
         val password = sharedPreferences.getString("password", null)
 
-        return if (userID != -1 && username != null && fullname != null && userType != null && password != null) {
-            TeacherData(userId = userID, username = username, fullname = fullname, user_type =  userType, password = password)
+        return if (userID != -1 && teacherID!=-1 && username != null && fullname != null && userType != null && password != null) {
+            TeacherData(userId = userID, teacherId = teacherID, username = username, fullname = fullname, user_type =  userType, password = password)
         } else {
             null
         }

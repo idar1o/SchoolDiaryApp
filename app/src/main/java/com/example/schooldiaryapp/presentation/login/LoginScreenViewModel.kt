@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.schooldiaryapp.data.encryptedprefs.EncryptedPrefsHelper
-import com.example.schooldiaryapp.data.network.models.LoginRequest
+import com.example.schooldiaryapp.data.source.network.models.LoginRequest
 import com.example.schooldiaryapp.domain.use_cases.TeacherLoginUseCase
 import com.example.schooldiaryapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,6 +33,7 @@ class LoginScreenViewModel @Inject constructor(
                                 password = password,
                                 fullname = data.fullName,
                                 userId = data.userId,
+                                teacherId = data.teacherId,
                                 user_type = data.userType
                             )
                         )
@@ -42,6 +43,7 @@ class LoginScreenViewModel @Inject constructor(
                                 password = password,
                                 fullname = data.fullName,
                                 userId = data.userId,
+                                teacherId = data.teacherId,
                                 user_type = data.userType
                             )
                         )

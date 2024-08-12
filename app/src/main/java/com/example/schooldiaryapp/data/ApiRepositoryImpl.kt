@@ -1,24 +1,38 @@
 package com.example.schooldiaryapp.data
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.example.ecommerceapp.network.ApiService
-import com.example.schooldiaryapp.data.network.models.Assignment
-import com.example.schooldiaryapp.data.network.models.Grade
-import com.example.schooldiaryapp.data.network.models.LoginRequest
-import com.example.schooldiaryapp.data.network.models.LoginResponse
-import com.example.schooldiaryapp.data.network.models.MessageResponse
-import com.example.schooldiaryapp.data.network.models.SchoolClass
-import com.example.schooldiaryapp.data.network.models.Student
-import com.example.schooldiaryapp.data.network.models.StudentsInfo
-import com.example.schooldiaryapp.data.network.models.Teacher
-import com.example.schooldiaryapp.data.network.models.WeeklySchedules
+import com.example.schooldiaryapp.data.source.local.daos.AssignmentDao
+import com.example.schooldiaryapp.data.source.local.models.CachedAssignments
+import com.example.schooldiaryapp.data.source.local.models.asEntity
+import com.example.schooldiaryapp.data.source.local.models.asExternalModel
+import com.example.schooldiaryapp.data.source.network.models.AssignmentResponse
+import com.example.schooldiaryapp.data.source.network.models.Grade
+import com.example.schooldiaryapp.data.source.network.models.LoginRequest
+import com.example.schooldiaryapp.data.source.network.models.LoginResponse
+import com.example.schooldiaryapp.data.source.network.models.MessageResponse
+import com.example.schooldiaryapp.data.source.network.models.SchoolClass
+import com.example.schooldiaryapp.data.source.network.models.Student
+import com.example.schooldiaryapp.data.source.network.models.StudentsInfo
+import com.example.schooldiaryapp.data.source.network.models.Teacher
+import com.example.schooldiaryapp.data.source.network.models.WeeklySchedules
+import com.example.schooldiaryapp.data.source.network.models.asExternalModel
 import com.example.schooldiaryapp.domain.ApiRepository
+import com.example.schooldiaryapp.domain.models.Assignment
 import com.example.schooldiaryapp.utils.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ApiRepositoryImpl @Inject constructor(
-    private val api: ApiService
+    private val api: ApiService,
+    private val dao: AssignmentDao
 ): ApiRepository {
+
+
     override suspend fun getClassesByTeacherId(teacherId: Int): Resource<List<SchoolClass>> {
         val response = try{
             api.getClassesByTeacherId(teacherId)
@@ -40,16 +54,22 @@ class ApiRepositoryImpl @Inject constructor(
         return Resource.Success(response)
     }
 
-    override suspend fun getAssignmentsByClassID(classId: Int?): Resource<List<Assignment>> {
-        val response = try{
-            api.getAssignmentsByClassID(classId)
-        }catch (e: Exception){
-            Log.d("LOL", "Error ${e.message}")
-            return Resource.Error("Error ${e.message}")
-        }
-        Log.d("LOL", "response ${response[0]}")
-        return Resource.Success(response)
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun getAssignmentList(classId: Long): Flow<List<Assignment>> =
+        flow {
+            emit(api.getAssignmentsByClassID(classId))
+        }.map{ it.map(AssignmentResponse::asExternalModel)}
+    override suspend fun getDatabaseList(classId: Long): Flow<List<Assignment?>> =
+        dao.getCharacter(classId = classId)
+            .map { it.map(CachedAssignments::asExternalModel)}
+
+    override suspend fun updateDbLocal(apiData: List<Assignment>): Flow<Boolean> = flow {
+        Log.d("LOL", "updateDbLocal ${apiData.get(0).title}")
+        val cachedAssignments = apiData.map { it.asEntity() }
+        val result = dao.insertAll(cachedAssignments)
+        emit(result.size == apiData.size)
     }
+
 
     override suspend fun getTeachersByClass(classId: Int?): Resource<List<Teacher>> {
         val response = try{

@@ -1,21 +1,26 @@
 package com.example.schooldiaryapp.domain
 
-import com.example.schooldiaryapp.data.network.models.Assignment
-import com.example.schooldiaryapp.data.network.models.Grade
-import com.example.schooldiaryapp.data.network.models.LoginRequest
-import com.example.schooldiaryapp.data.network.models.LoginResponse
-import com.example.schooldiaryapp.data.network.models.MessageResponse
-import com.example.schooldiaryapp.data.network.models.SchoolClass
-import com.example.schooldiaryapp.data.network.models.Student
-import com.example.schooldiaryapp.data.network.models.StudentsInfo
-import com.example.schooldiaryapp.data.network.models.Teacher
-import com.example.schooldiaryapp.data.network.models.WeeklySchedules
+import com.example.schooldiaryapp.data.source.network.models.Grade
+import com.example.schooldiaryapp.data.source.network.models.LoginRequest
+import com.example.schooldiaryapp.data.source.network.models.LoginResponse
+import com.example.schooldiaryapp.data.source.network.models.MessageResponse
+import com.example.schooldiaryapp.data.source.network.models.SchoolClass
+import com.example.schooldiaryapp.data.source.network.models.Student
+import com.example.schooldiaryapp.data.source.network.models.StudentsInfo
+import com.example.schooldiaryapp.data.source.network.models.Teacher
+import com.example.schooldiaryapp.data.source.network.models.WeeklySchedules
+import com.example.schooldiaryapp.domain.models.Assignment
 import com.example.schooldiaryapp.utils.Resource
+import kotlinx.coroutines.flow.Flow
 
 interface ApiRepository {
     suspend fun getClassesByTeacherId(teacherId: Int): Resource<List<SchoolClass>>
     suspend fun getStudentsByClassID(classId: Int?): Resource<List<Student>>
-    suspend fun getAssignmentsByClassID(classId: Int?): Resource<List<Assignment>>
+
+    fun getAssignmentList(classId: Long): Flow<List<Assignment>>
+    suspend fun getDatabaseList(classId: Long): Flow<List<Assignment?>>
+
+    suspend fun updateDbLocal(apiData: List<Assignment>): Flow<Boolean>
     suspend fun getTeachersByClass(classId: Int?) : Resource<List<Teacher>>
     suspend fun getGradesByStudentID(studentId: Int?): Resource<List<Grade>>
     suspend fun addStudentGrade(studentData: Grade?): Resource<Unit>

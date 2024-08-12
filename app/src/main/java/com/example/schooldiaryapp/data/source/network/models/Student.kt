@@ -1,4 +1,4 @@
-package com.example.schooldiaryapp.data.network.models
+package com.example.schooldiaryapp.data.source.network.models
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -18,7 +18,7 @@ data class Student @RequiresApi(Build.VERSION_CODES.O) constructor(
     var username: String,
 
     var gradeList: MutableState<List<Grade>> = mutableStateOf<List<Grade>>(listOf(
-        Grade(1,2,Feedback("",false),1, LocalDateTime.of(2024, 9, 2, 9, 34, 56))
+        Grade(1,2, Feedback("",false),1, LocalDateTime.of(2024, 9, 2, 9, 34, 56))
     ))
 
 )

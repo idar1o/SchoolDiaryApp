@@ -1,55 +1,68 @@
 package com.example.schooldiaryapp.presentation.acc_teacher.tasks_screen
 
 import android.util.Log
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.schooldiaryapp.domain.models.Assignment
 import com.example.schooldiaryapp.domain.use_cases.GetAssignmentsByClassIdUseCase
-import com.example.schooldiaryapp.utils.Resource
+import com.example.schooldiaryapp.utils.Result.Error
+import com.example.schooldiaryapp.utils.Result.Loading
+import com.example.schooldiaryapp.utils.Result.Success
+import com.example.schooldiaryapp.utils.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
+
+sealed interface TasksListState {
+    data class Success(
+        val tasksList: List<Assignment>,
+        ) : TasksListState
+
+    data class Error(val exception: Throwable? = null) : TasksListState
+    data object Loading : TasksListState
+}
 
 
 @HiltViewModel
 class TasksScreenViewModel @Inject constructor(
     private val getAssignmentsByClassIdUseCase: GetAssignmentsByClassIdUseCase
 ) : ViewModel(){
-    private val _tasksList = mutableStateOf(TasksListState())
-    val tasksList: State<TasksListState> = _tasksList
-    fun fetchTasksList(classId: Int?) {
-        Log.d("LOL", "В fetchTasksList")
-        viewModelScope.launch {
-            _tasksList.value = _tasksList.value.copy(isLoading = true)
-            when (val result = getAssignmentsByClassIdUseCase.invoke(classId)) {
-                is Resource.Success -> {
-                    Log.d("LOL", "is Resource.Success -> ${result.data}")
-                    _tasksList.value = _tasksList.value.copy(
-                        tasksList = result.data ?: emptyList(),
-                        isLoading = false
-                    )
+    private val _classId = MutableStateFlow<Long?>(null) // Хранит текущее значение classId
+    val classId: StateFlow<Long?> = _classId
 
-                }
+    fun setClassId(id: Long) {
+        _classId.value = id
+    }
 
-                is Resource.Error -> {
-                    Log.d("LOL", "is Resource.Error -> ${result.data}")
-                    _tasksList.value = _tasksList.value.copy(
-                        loadError = result.message ?: "Unknown error",
-                        isLoading = false
-                    )
-                }
-                is Resource.Loading -> {
-                    Log.d("LOL", "is Resource.Loading -> ${result.data}")
+    val uiState: StateFlow<TasksListState> = classId.filterNotNull().flatMapLatest { id ->
+        getAssignmentsByClassIdUseCase(id)
+            .asResult()
+            .map { result ->
+                when (result) {
+                    is Loading -> {
+                        Log.d("LOL", "is Loading")
+                        TasksListState.Loading
+                    }
+                    is Success -> {
+                        Log.d("LOL", "is Success ${result.data.get(0).subjectName }")
+                        TasksListState.Success(result.data)
+                    }
+                    is Error -> {
+                        Log.d("LOL", "is Error ${result.exception.message }")
+                        TasksListState.Error(result.exception)
+                    }
                 }
             }
-
-            Log.d(
-                "LOL", "Error : ${_tasksList.value.loadError}, " +
-                        "Success : ${_tasksList.value.tasksList}, " +
-                        "Loading : ${_tasksList.value.isLoading}"
-            )
-        }
-    }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = TasksListState.Loading,
+    )
 }
 

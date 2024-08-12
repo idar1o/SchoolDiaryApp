@@ -65,21 +65,20 @@ fun BottomBarItems(
         if (selected) androidx.compose.ui.graphics.Color.Cyan else MaterialTheme.colorScheme.onPrimary
 
     IconButton(onClick = {
-        navHostController.navigate(tab.routes)
+        navHostController.navigate(tab.routes) {
+            popUpTo(navHostController.graph.startDestinationId) {
+                saveState = true
+            }
+            // Удаляем текущий путь из стека
+            launchSingleTop = true
+            restoreState = true
+        }
     }) {
-//        Column {
-            Icon(
-                painter = painterResource(id = tab.icon),
-                contentDescription = "",
-                tint = contentColor,
-                modifier = Modifier.size(30.dp)
-            )
-//            val title = stringResource(id = tab.title)
-//            Text(
-//                text = "$title"
-//            )
-//        }
+        Icon(
+            painter = painterResource(id = tab.icon),
+            contentDescription = null,
+            tint = contentColor,
+            modifier = Modifier.size(30.dp)
+        )
     }
-
-
 }

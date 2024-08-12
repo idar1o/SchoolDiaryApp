@@ -1,6 +1,6 @@
 package com.example.schooldiaryapp.presentation.models
 
-import com.example.schooldiaryapp.data.network.models.Teacher
+import com.example.schooldiaryapp.data.source.network.models.Teacher
 
 data class SubjectListState(
     var subjectList: List<Teacher> =  listOf(),

@@ -14,19 +14,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.schooldiaryapp.presentation.acc_teacher.class_screen.ClassScreen
-import com.example.schooldiaryapp.presentation.acc_teacher.class_screen.ClassScreenViewModel
 import com.example.schooldiaryapp.presentation.components.TopClassBar
 import com.example.schooldiaryapp.presentation.components.TopClassesBarViewModel
 import com.example.schooldiaryapp.presentation.navigation.BottomBarNavigation
@@ -87,6 +83,8 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+
 }
 @Composable
 fun Navigation(){
@@ -121,34 +119,27 @@ fun Navigation(){
         composable(
             route = "class_detail_screen/{classId}",
             arguments = listOf(
-                navArgument("classId") {
-                    type = NavType.IntType
-                }
-            )
+                    navArgument("classId") {
+                        type = NavType.IntType
+                    }
+                    )
         ) {
 
             val classIdForList = remember {
                 it.arguments?.getInt("classId")
             }
-            val viewModel: ClassScreenViewModel = hiltViewModel()
-//
-            LaunchedEffect(classIdForList) {
-                Log.d("LOL", "classIdForList: $classIdForList")
-                classIdForList?.let { viewModel.fetchStudentList(it) }
-            }
-            val studentInfo = viewModel.studentList.value
+
+//            LaunchedEffect(classIdForList) {
+//                Log.d("LOL", "classIdForList: $classIdForList")
+//                classIdForList?.let { viewModel.fetchStudentList(it) }
+//            }
+//            val studentInfo = viewModel.studentList.value
 //                            produceState<Resource<List<Student>>>(initialValue = Resource.Loading()) {
 //                                value = classIdForList?.let { it1 ->
 //
 //                                }
 //                            }.value
-            ClassScreen(
-                studentInfo,
-                onAddGrade = { grade ->
-                    viewModel.addGrade(grade)
 
-                }
-            )
         }
 
 

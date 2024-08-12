@@ -1,4 +1,4 @@
-package com.example.schooldiaryapp.data.network.models
+package com.example.schooldiaryapp.data.source.network.models
 
 data class MessageResponse(
     val message_id: Int,

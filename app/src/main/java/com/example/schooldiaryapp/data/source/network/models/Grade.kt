@@ -1,4 +1,4 @@
-package com.example.schooldiaryapp.data.network.models
+package com.example.schooldiaryapp.data.source.network.models
 
 import com.google.gson.annotations.SerializedName
 import java.time.LocalDateTime

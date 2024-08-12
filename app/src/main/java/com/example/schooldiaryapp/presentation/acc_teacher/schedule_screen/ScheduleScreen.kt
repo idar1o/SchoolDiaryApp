@@ -14,8 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.schooldiaryapp.data.network.models.Lesson
-import com.example.schooldiaryapp.data.network.models.WeeklySchedules
+import com.example.schooldiaryapp.data.source.network.models.Lesson
+import com.example.schooldiaryapp.data.source.network.models.WeeklySchedules
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
