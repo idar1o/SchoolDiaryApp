@@ -20,9 +20,7 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 sealed interface TasksListState {
-    data class Success(
-        val tasksList: List<Assignment>,
-        ) : TasksListState
+    data class Success(val tasksList: List<Assignment>) : TasksListState
 
     data class Error(val exception: Throwable? = null) : TasksListState
     data object Loading : TasksListState
@@ -46,7 +44,7 @@ class TasksScreenViewModel @Inject constructor(
             .map { result ->
                 when (result) {
                     is Loading -> {
-                        Log.d("LOL", "is Loading")
+                         Log.d("LOL", "is Loading")
                         TasksListState.Loading
                     }
                     is Success -> {

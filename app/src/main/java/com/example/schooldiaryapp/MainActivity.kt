@@ -1,10 +1,11 @@
 package com.example.schooldiaryapp
 
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -36,6 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val topAppBarViewModel: TopClassesBarViewModel by viewModels()
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -93,11 +95,6 @@ fun Navigation(){
         navController = navController,
         startDestination = "login_nav_screen"
     ) {
-        Log.d("LOL", "В Navhoste")
-
-        composable(route = "login_nav_screen") {
-
-        }
 
 
         composable(

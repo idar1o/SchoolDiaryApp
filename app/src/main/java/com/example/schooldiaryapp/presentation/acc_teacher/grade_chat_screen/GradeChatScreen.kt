@@ -48,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.schooldiaryapp.presentation.navigation.BottomBarRoutes
+import com.example.schooldiaryapp.ui.theme.AppBarBgColor
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -121,7 +122,7 @@ fun GradeChatScreen(
                         Icon(imageVector = Icons.Filled.MoreVert, contentDescription = "More options", tint = Color.White)
                     }
                 },
-                backgroundColor = MaterialTheme.colors.primary
+                backgroundColor = AppBarBgColor
             )
         },
         content = { paddingValues ->

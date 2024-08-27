@@ -144,6 +144,6 @@ fun ClassItem(student: StudentsInfo,
 
     }
 }
-inline fun getLatestGradeDate(grades: List<Grade>): LocalDateTime? {
+fun getLatestGradeDate(grades: List<Grade>): LocalDateTime? {
     return grades.maxByOrNull { it.gradeDt }?.gradeDt
 }

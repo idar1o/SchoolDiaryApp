@@ -1,5 +1,6 @@
 package com.example.ecommerceapp.network
 
+import com.example.schooldiaryapp.data.source.network.models.AssignmentRequest
 import com.example.schooldiaryapp.data.source.network.models.AssignmentResponse
 import com.example.schooldiaryapp.data.source.network.models.Grade
 import com.example.schooldiaryapp.data.source.network.models.LoginRequest
@@ -14,6 +15,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -36,6 +38,12 @@ interface ApiService {
 
     @GET("/classes/assignments/{class_id}")
     suspend fun getAssignmentsByClassID(@Path("class_id") classId: Long): List<AssignmentResponse>
+    @PUT("/assignments/{assignment_id}")
+    suspend fun updateAssignmentByID(@Path("assignment_id") assignmentId: Int,
+                                     @Body assignment: AssignmentRequest
+    ): Response<Void>
+    @GET("/assignments/{assignment_id}")
+    suspend fun getAssignmentByID(@Path("assignment_id") assignmentId: Int): AssignmentResponse
 
     @GET("/chat/messages")
     suspend fun getMessagesByUsersID(@Query("sender_id") senderId: Int, @Query("receiver_id") receiverId: Int ): List<MessageResponse>

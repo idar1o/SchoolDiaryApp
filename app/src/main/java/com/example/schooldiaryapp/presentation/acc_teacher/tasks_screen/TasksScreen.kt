@@ -1,6 +1,7 @@
 package com.example.schooldiaryapp.presentation.acc_teacher.tasks_screen
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,13 +9,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.progressSemantics
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -29,7 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.schooldiaryapp.domain.models.Assignment
+import com.example.schooldiaryapp.presentation.components.CircleProgress
+import com.example.schooldiaryapp.presentation.components.ErrorContent
 import com.example.schooldiaryapp.presentation.components.TopClassesBarViewModel
+import com.example.schooldiaryapp.presentation.navigation.ScreenRoutes
 
 @Composable
 fun TasksScreen(navHostController: NavHostController, vm: TasksScreenViewModel, topAppBarViewModel: TopClassesBarViewModel,) {
@@ -47,7 +48,7 @@ fun TasksScreen(navHostController: NavHostController, vm: TasksScreenViewModel, 
 
     Box(modifier = Modifier.fillMaxSize()){
 
-        TaskMainContent(listState = listState, stateTasksList = uiState)
+        TaskMainContent(listState = listState, stateTasksList = uiState, navHostController = navHostController)
 
 
     }
@@ -57,7 +58,8 @@ fun TasksScreen(navHostController: NavHostController, vm: TasksScreenViewModel, 
 @Composable
 fun TaskMainContent(
     listState: LazyListState,
-    stateTasksList: TasksListState
+    stateTasksList: TasksListState,
+    navHostController: NavHostController
 ) {
    when (stateTasksList) {
        is TasksListState.Error -> ErrorContent(exception = stateTasksList.exception)
@@ -70,7 +72,9 @@ fun TaskMainContent(
                items(
                    items = stateTasksList.tasksList,
                ) { task ->
-                   TaskItem(task = task)
+                   TaskItem(task = task){taskId ->
+                       navHostController.navigate(ScreenRoutes.TaskItem.createRoute(taskId))
+                   }
                }
            }
        }
@@ -78,36 +82,18 @@ fun TaskMainContent(
 
 }
 
-@Composable
-private fun ErrorContent(exception: Throwable?) {
-    Log.d("LOL", "ErrorContent: ${ exception?.message }")
-}
 
-@Composable
-fun CircleProgress(
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier.fillMaxSize(),
-    ) {
-        CircularProgressIndicator(
-            strokeWidth = 5.dp,
-            modifier = Modifier
-                .progressSemantics()
-                .size(48.dp),
-        )
-    }
-}
 @Composable
 fun TaskItem(
     task: Assignment,
-
+    onItemClick: (taskId: Int) -> Unit
     ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp), // Добавлен модификатор clickable,
+            .padding(8.dp)
+            .clickable { onItemClick(task.assignmentId) }
+        , // Добавлен модификатор clickable,
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Center
     ) {

@@ -8,6 +8,7 @@ import com.example.schooldiaryapp.data.source.local.daos.AssignmentDao
 import com.example.schooldiaryapp.data.source.local.models.CachedAssignments
 import com.example.schooldiaryapp.data.source.local.models.asEntity
 import com.example.schooldiaryapp.data.source.local.models.asExternalModel
+import com.example.schooldiaryapp.data.source.network.models.AssignmentRequest
 import com.example.schooldiaryapp.data.source.network.models.AssignmentResponse
 import com.example.schooldiaryapp.data.source.network.models.Grade
 import com.example.schooldiaryapp.data.source.network.models.LoginRequest
@@ -31,7 +32,10 @@ class ApiRepositoryImpl @Inject constructor(
     private val api: ApiService,
     private val dao: AssignmentDao
 ): ApiRepository {
-
+    override fun updateAssignmentById(assignmentId: Int, assignment: AssignmentRequest): Flow<Boolean> = flow {
+        val response = api.updateAssignmentByID(assignmentId, assignment)
+        emit(response.isSuccessful)
+    }
 
     override suspend fun getClassesByTeacherId(teacherId: Int): Resource<List<SchoolClass>> {
         val response = try{
@@ -59,9 +63,19 @@ class ApiRepositoryImpl @Inject constructor(
         flow {
             emit(api.getAssignmentsByClassID(classId))
         }.map{ it.map(AssignmentResponse::asExternalModel)}
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun getAssignment(assignmentId: Int): Flow<Assignment> = flow {
+        val assignmentApiModel = api.getAssignmentByID(assignmentId)
+        emit(assignmentApiModel)
+    }.map { apiModel ->
+        apiModel.asExternalModel()
+    }
+
     override suspend fun getDatabaseList(classId: Long): Flow<List<Assignment?>> =
         dao.getCharacter(classId = classId)
             .map { it.map(CachedAssignments::asExternalModel)}
+
 
     override suspend fun updateDbLocal(apiData: List<Assignment>): Flow<Boolean> = flow {
         Log.d("LOL", "updateDbLocal ${apiData.get(0).title}")

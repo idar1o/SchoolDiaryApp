@@ -11,8 +11,12 @@ data class AssignmentResponse(
     val assignmentId: Int?,
     @SerializedName("class_id")
     val classId: Int?,
+    @SerializedName("subject_id")
+    val subjectId: Int?,
     @SerializedName("deadline")
     val deadline: LocalDate?,
+    @SerializedName("assignment_day")
+    val assignmentDay: LocalDate?,
     @SerializedName("description")
     val description: String?,
     @SerializedName("subject_name")
@@ -35,6 +39,8 @@ fun AssignmentResponse.asExternalModel(): Assignment {
         subjectName = subjectName ?: "",
         studentsId = studentsId ?: listOf(),
         title = title ?: "",
-        studentNames = studentNames?.split(", ")?.map { it.trim() } ?: listOf()
+        studentNames = studentNames?.split(", ")?.map { it.trim() } ?: listOf(),
+        assignmentDay = assignmentDay ?: LocalDate.MIN,
+        subjectId = subjectId ?: -1
     )
 }

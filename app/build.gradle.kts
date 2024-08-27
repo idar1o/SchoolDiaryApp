@@ -99,4 +99,6 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     implementation("androidx.room:room-paging:$room_version")
 
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.35.1-alpha")
+
 }

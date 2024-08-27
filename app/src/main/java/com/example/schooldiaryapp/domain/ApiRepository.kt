@@ -1,5 +1,6 @@
 package com.example.schooldiaryapp.domain
 
+import com.example.schooldiaryapp.data.source.network.models.AssignmentRequest
 import com.example.schooldiaryapp.data.source.network.models.Grade
 import com.example.schooldiaryapp.data.source.network.models.LoginRequest
 import com.example.schooldiaryapp.data.source.network.models.LoginResponse
@@ -18,7 +19,10 @@ interface ApiRepository {
     suspend fun getStudentsByClassID(classId: Int?): Resource<List<Student>>
 
     fun getAssignmentList(classId: Long): Flow<List<Assignment>>
+    fun getAssignment(assignmentId: Int): Flow<Assignment>
     suspend fun getDatabaseList(classId: Long): Flow<List<Assignment?>>
+
+    fun updateAssignmentById(assignmentId: Int, assignment: AssignmentRequest): Flow<Boolean>
 
     suspend fun updateDbLocal(apiData: List<Assignment>): Flow<Boolean>
     suspend fun getTeachersByClass(classId: Int?) : Resource<List<Teacher>>

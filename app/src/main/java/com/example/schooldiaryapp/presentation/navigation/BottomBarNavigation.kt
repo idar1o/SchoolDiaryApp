@@ -25,6 +25,8 @@ import com.example.schooldiaryapp.presentation.acc_teacher.grades_screen.GradeSc
 import com.example.schooldiaryapp.presentation.acc_teacher.grades_screen.GradeScreenViewModel
 import com.example.schooldiaryapp.presentation.acc_teacher.schedule_screen.ScheduleScreen
 import com.example.schooldiaryapp.presentation.acc_teacher.schedule_screen.ScheduleScreenViewModel
+import com.example.schooldiaryapp.presentation.acc_teacher.task_item_screen.TaskItemScreen
+import com.example.schooldiaryapp.presentation.acc_teacher.task_item_screen.TaskItemViewModel
 import com.example.schooldiaryapp.presentation.acc_teacher.tasks_screen.TasksScreen
 import com.example.schooldiaryapp.presentation.acc_teacher.tasks_screen.TasksScreenViewModel
 import com.example.schooldiaryapp.presentation.components.TopClassesBarViewModel
@@ -90,15 +92,14 @@ fun BottomBarNavigation(
         }
 
         composable(
-            route = ScreenRoutes.Chat.route,
-            arguments = ScreenRoutes.Chat.args
+            route = ScreenRoutes.TaskItem.route,
+            arguments = ScreenRoutes.TaskItem.args
         ) { backStackEntry ->
-            val senderId = backStackEntry.arguments?.getInt("senderId") ?: 0
-            val senderName = backStackEntry.arguments?.getString("senderName") ?: ""
-            val vm: GradeChatScreenViewModel = hiltViewModel()
+//            val taskId = backStackEntry.arguments?.getInt("taskId") ?: 0
+            val vm: TaskItemViewModel = hiltViewModel()
 
 
-            GradeChatScreen(navHostController = navHostController, vm = vm, senderId, senderName = senderName)
+            TaskItemScreen(navHostController = navHostController, vm = vm)
         }
     }
 }

@@ -14,11 +14,13 @@ data class CachedAssignments(
     val assignmentId: Int,
     val classId: Int,
     val deadline: LocalDate,
+    val assignmentDay: LocalDate,
     val description: String,
     val subjectName: String,
     val studentsId: List<Int>,
     val title: String,
-    val studentNames: List<String>
+    val studentNames: List<String>,
+    val subjectId: Int
 ){
 
     companion object {
@@ -36,7 +38,9 @@ fun CachedAssignments.asExternalModel(): Assignment {
         subjectName = subjectName,
         studentsId = studentsId,
         title = title,
-        studentNames = studentNames
+        studentNames = studentNames,
+        assignmentDay = assignmentDay,
+        subjectId = subjectId
     )
 }
 
@@ -49,7 +53,9 @@ fun Assignment.asEntity(): CachedAssignments {
         subjectName = subjectName,
         studentsId = studentsId,
         title = title,
-        studentNames = studentNames
+        studentNames = studentNames,
+        assignmentDay = assignmentDay,
+        subjectId = subjectId
     )
 }
 
