@@ -10,5 +10,4 @@ class GetGradesByStudentUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(studentId: Int?): Resource<List<Grade>> =
         repository.getGradesByStudentID(studentId)
-
 }

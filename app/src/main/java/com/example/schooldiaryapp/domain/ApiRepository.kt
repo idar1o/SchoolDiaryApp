@@ -1,5 +1,6 @@
 package com.example.schooldiaryapp.domain
 
+import com.example.schooldiaryapp.data.source.network.models.Announcement
 import com.example.schooldiaryapp.data.source.network.models.AssignmentRequest
 import com.example.schooldiaryapp.data.source.network.models.Grade
 import com.example.schooldiaryapp.data.source.network.models.LoginRequest
@@ -15,9 +16,10 @@ import com.example.schooldiaryapp.utils.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface ApiRepository {
+    fun getAllAnnouncementByType(type: String): Flow<List<Announcement>>
     suspend fun getClassesByTeacherId(teacherId: Int): Resource<List<SchoolClass>>
     suspend fun getStudentsByClassID(classId: Int?): Resource<List<Student>>
-
+    fun getAnnouncementById(id: Int): Flow<Announcement>
     fun getAssignmentList(classId: Long): Flow<List<Assignment>>
     fun getAssignment(assignmentId: Int): Flow<Assignment>
     suspend fun getDatabaseList(classId: Long): Flow<List<Assignment?>>

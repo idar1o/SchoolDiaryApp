@@ -18,7 +18,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.schooldiaryapp.R
+import com.example.schooldiaryapp.presentation.acc_teacher.announcement_screen.AnnouncementDetailScreen
+import com.example.schooldiaryapp.presentation.acc_teacher.announcement_screen.AnnouncementDetailViewModel
 import com.example.schooldiaryapp.presentation.acc_teacher.announcement_screen.AnnouncementScreen
+import com.example.schooldiaryapp.presentation.acc_teacher.announcement_screen.AnnouncementViewModel
 import com.example.schooldiaryapp.presentation.acc_teacher.grade_chat_screen.GradeChatScreen
 import com.example.schooldiaryapp.presentation.acc_teacher.grade_chat_screen.GradeChatScreenViewModel
 import com.example.schooldiaryapp.presentation.acc_teacher.grades_screen.GradeScreen
@@ -75,7 +78,8 @@ fun BottomBarNavigation(
                 }
             }
             composable(BottomBarRoutes.ANNOUNCEMENT.routes) {
-                AnnouncementScreen(navHostController = navHostController)
+                val vm: AnnouncementViewModel  = hiltViewModel()
+                AnnouncementScreen(vm = vm, navHostController = navHostController)
             }
         }
         // Ensure that the Chat route is directly available in the main graph
@@ -101,6 +105,13 @@ fun BottomBarNavigation(
 
             TaskItemScreen(navHostController = navHostController, vm = vm)
         }
+        composable(
+            route = ScreenRoutes.AnnouncementDetail.route,
+            arguments = ScreenRoutes.AnnouncementDetail.args
+        ) { backStackEntry ->
+            val vm: AnnouncementDetailViewModel = hiltViewModel()
+            AnnouncementDetailScreen(navHostController = navHostController, vm = vm)
+        }
     }
 }
 
@@ -123,6 +134,15 @@ sealed class ScreenRoutes(val route: String, val args: List<NamedNavArgument> = 
         )
     ) {
         fun createRoute(taskId: Int) = "/taskItem/$taskId"
+    }
+
+    data object AnnouncementDetail : ScreenRoutes(
+        route = "/announcement/{announceId}",
+        args = listOf(
+            navArgument("announceId") { type = NavType.IntType }
+        )
+    ) {
+        fun createRoute(announceId: Int) = "/announcement/$announceId"
     }
 }
 

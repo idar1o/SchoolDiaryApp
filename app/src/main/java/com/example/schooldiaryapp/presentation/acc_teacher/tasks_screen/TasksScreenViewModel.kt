@@ -44,7 +44,7 @@ class TasksScreenViewModel @Inject constructor(
             .map { result ->
                 when (result) {
                     is Loading -> {
-                         Log.d("LOL", "is Loading")
+                        Log.d("LOL", "is Loading")
                         TasksListState.Loading
                     }
                     is Success -> {

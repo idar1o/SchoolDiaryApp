@@ -33,7 +33,6 @@ sealed interface TaskItemState{
 
     data class Error(val exception: Throwable? = null) : TaskItemState
     data object Loading : TaskItemState
-
     data class Init( val task: Assignment ) : TaskItemState
 }
 
@@ -91,24 +90,6 @@ class TaskItemViewModel @Inject constructor(
         }
     }
 
-    // Метод получения данных и их отображения
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    private fun getAssignmentById(taskId: Int): StateFlow<TaskItemState> {
-//        return getAssignmentByIdUseCase(taskId)
-//            .asResult()
-//            .map { result ->
-//                when (result) {
-//                    is Loading -> TaskItemState.Loading
-//                    is Success -> TaskItemState.Success(result.data)
-//                    is Error -> TaskItemState.Error(result.exception)
-//                }
-//            }
-//            .stateIn(
-//                scope = viewModelScope,
-//                started = SharingStarted.WhileSubscribed(5_000),
-//                initialValue = _uiState.value
-//            )
-//    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun updateData(assignment: Assignment){
@@ -136,25 +117,5 @@ class TaskItemViewModel @Inject constructor(
     private fun formatDateToRFC3339(date: LocalDate): String {
         return date.atStartOfDay().atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
     }
-
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    fun refreshAssignment() {
-//        _isRefreshing.value = true
-//        viewModelScope.launch {
-//            getAssignmentByIdUseCase(args.taskId)
-//                .asResult()
-//                .map { result ->
-//                    when (result) {
-//                        is Loading -> TaskItemState.Loading
-//                        is Success -> TaskItemState.Success(result.data)
-//                        is Error -> TaskItemState.Error(result.exception)
-//                    }
-//                }
-//                .collect { state ->
-//                    _uiState.value = state
-//                }
-//            _isRefreshing.value = false
-//        }
-//    }
 
 }

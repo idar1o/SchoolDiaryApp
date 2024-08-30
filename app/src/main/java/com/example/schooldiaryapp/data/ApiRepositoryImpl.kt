@@ -8,6 +8,8 @@ import com.example.schooldiaryapp.data.source.local.daos.AssignmentDao
 import com.example.schooldiaryapp.data.source.local.models.CachedAssignments
 import com.example.schooldiaryapp.data.source.local.models.asEntity
 import com.example.schooldiaryapp.data.source.local.models.asExternalModel
+import com.example.schooldiaryapp.data.source.network.models.Announcement
+import com.example.schooldiaryapp.data.source.network.models.AnnouncementResponse
 import com.example.schooldiaryapp.data.source.network.models.AssignmentRequest
 import com.example.schooldiaryapp.data.source.network.models.AssignmentResponse
 import com.example.schooldiaryapp.data.source.network.models.Grade
@@ -37,6 +39,13 @@ class ApiRepositoryImpl @Inject constructor(
         emit(response.isSuccessful)
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun getAllAnnouncementByType(type: String): Flow<List<Announcement>> =
+        flow {
+            emit(api.getAllAnnouncementByType(type))
+        }.map{ it.map(AnnouncementResponse::asExternalModel) }
+
     override suspend fun getClassesByTeacherId(teacherId: Int): Resource<List<SchoolClass>> {
         val response = try{
             api.getClassesByTeacherId(teacherId)
@@ -56,6 +65,14 @@ class ApiRepositoryImpl @Inject constructor(
         }
         Log.d("LOL", "response ${response[0]}")
         return Resource.Success(response)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun getAnnouncementById(id: Int): Flow<Announcement> = flow {
+        val assignmentApiModel = api.getAnnouncementById(id)
+        emit(assignmentApiModel)
+    }.map { apiModel ->
+        apiModel.asExternalModel()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

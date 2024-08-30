@@ -1,5 +1,6 @@
 package com.example.ecommerceapp.network
 
+import com.example.schooldiaryapp.data.source.network.models.AnnouncementResponse
 import com.example.schooldiaryapp.data.source.network.models.AssignmentRequest
 import com.example.schooldiaryapp.data.source.network.models.AssignmentResponse
 import com.example.schooldiaryapp.data.source.network.models.Grade
@@ -21,6 +22,10 @@ import retrofit2.http.Query
 
 
 interface ApiService {
+    @GET("/announcements/type/{receiver_type}")
+    suspend fun getAllAnnouncementByType(@Path("receiver_type") type: String): List<AnnouncementResponse>
+    @GET("/announcements/id/{announce_id}")
+    suspend fun getAnnouncementById(@Path("announce_id") id: Int): AnnouncementResponse
     @GET("/classes/{teacher_id}")
     suspend fun getClassesByTeacherId(@Path("teacher_id") teacherId: Int): List<SchoolClass>
 

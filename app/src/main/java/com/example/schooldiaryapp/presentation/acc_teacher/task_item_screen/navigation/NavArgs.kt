@@ -10,3 +10,13 @@ data class TaskArgs(
         taskId = savedStateHandle.get<Int>(ARG_TASK_ID) ?: 0
     )
 }
+
+
+const val ARG_ANNOUNCE_ID = "announceId"
+data class AnnouncementArgs(
+    val announceId: Int
+) {
+    constructor(savedStateHandle: SavedStateHandle) : this(
+        announceId = savedStateHandle.get<Int>(ARG_ANNOUNCE_ID) ?: 0
+    )
+}

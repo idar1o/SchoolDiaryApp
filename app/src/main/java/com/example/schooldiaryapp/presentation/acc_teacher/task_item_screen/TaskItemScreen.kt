@@ -74,7 +74,6 @@ fun TypeTaskContent(uiState: TaskItemState, navHostController: NavHostController
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 TaskContent(assignment = uiState.task, navHostController = navHostController, vm)
             }
-
         }
         is TaskItemState.Init -> {
 
@@ -217,8 +216,8 @@ fun convertLongToLocalDate(timestamp: Long): LocalDate {
 }
 @RequiresApi(Build.VERSION_CODES.O)
 fun localDateToMillis(date: LocalDate): Long {
-    val dateTime = date.atStartOfDay() // Конвертируем LocalDate в LocalDateTime с началом дня
-    return dateTime.toInstant(ZoneOffset.UTC).toEpochMilli() // Конвертируем в миллисекунды
+    val dateTime = date.atStartOfDay()
+    return dateTime.toInstant(ZoneOffset.UTC).toEpochMilli()
 }
 @Composable
 fun ClearableTextField(
