@@ -24,6 +24,9 @@ The backend server is currently offline. Future updates may include server activ
 - **Jetpack Compose** – Modern UI toolkit
 - **WebSockets** – Real-time chat functionality
 
+## Screenshots
+https://github.com/user-attachments/assets/2f4fb95e-d302-4745-8f89-6d69531a1e51
+
 ## Installation
 1. Clone the repository:
    ```bash
